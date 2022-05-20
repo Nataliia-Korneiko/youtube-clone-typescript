@@ -1,21 +1,40 @@
 import express from 'express';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import helmet from 'helmet';
+import { CORS_ORIGIN } from './constants';
+import { connectToDatabase, disconnectFromDatabase } from './utils/database';
+import logger from './utils/logger';
+dotenv.config();
 
-const PORT = process.env.PORT || 4000;
+const { PORT = 4040 } = process.env;
+const signals = ['SIGTERM', 'SIGINT'];
 const app = express();
 
-const server = app.listen(PORT, () => {
-  console.log(`Server listening at htp://localhost:${PORT}`);
-});
+app.use(cookieParser());
+app.use(express.json());
+app.use(
+  cors({
+    origin: CORS_ORIGIN,
+    credentials: true,
+  })
+);
+app.use(helmet());
 
-const signals = ['SIGTERM', 'SIGINT'];
+const server = app.listen(PORT, async () => {
+  await connectToDatabase();
+  logger.info(`Server listening at htp://localhost:${PORT}`);
+});
 
 function gracefulShutdown(signal: string) {
   process.on(signal, async () => {
-    console.log('Goodbye, got signal', signal);
+    logger.info('Goodbye, got signal', signal);
     server.close();
 
     // disconnect from the db
-    console.log('Server disconnected');
+    await disconnectFromDatabase();
+    logger.info('Server disconnected');
     process.exit(0);
   });
 }

@@ -12,7 +12,7 @@ import videoRoute from './modules/video/video.route';
 import deserializeUser from './middleware/deserializeUser';
 dotenv.config();
 
-const { PORT = 4040 } = process.env;
+const PORT = process.env.PORT || 4000;
 const signals = ['SIGTERM', 'SIGINT'];
 const app = express();
 

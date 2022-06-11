@@ -1,11 +1,11 @@
 import '../styles/globals.css';
+import { ReactElement, ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { NextPage } from 'next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
-import { NextPage } from 'next';
-import { ReactElement, ReactNode } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -40,11 +40,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         }}
       >
         <NotificationsProvider>
-          {getLayout(
-            <main>
-              <Component {...pageProps} />
-            </main>
-          )}
+          <QueryClientProvider client={queryClient}>
+            {getLayout(
+              <main>
+                <Component {...pageProps} />
+              </main>
+            )}
+          </QueryClientProvider>
         </NotificationsProvider>
       </MantineProvider>
     </>

@@ -21,3 +21,14 @@ export function login(payload: { email: string; password: string }) {
     })
     .then((res) => res.data);
 }
+
+export function getMe() {
+  return axios
+    .get(userBase, {
+      withCredentials: true,
+    })
+    .then((res) => res.data)
+    .catch(() => {
+      return null;
+    });
+}

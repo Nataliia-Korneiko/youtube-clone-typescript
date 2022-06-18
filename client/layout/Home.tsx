@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { AppShell, Header, Navbar, Box, Anchor } from '@mantine/core';
 import { useMe } from '../context/me';
+import UploadVideo from '../components/UploadVideo';
 
 function HomePageLayout({ children }: { children: React.ReactNode }) {
   const { user, refetch } = useMe();
@@ -17,8 +18,8 @@ function HomePageLayout({ children }: { children: React.ReactNode }) {
       }
       header={
         <Header height={60} p='xs'>
-          <Box>
-            <Box>
+          <Box sx={() => ({ display: 'flex' })}>
+            <Box sx={() => ({ flex: '1' })}>
               <Image src='/logo.png' alt='logo' width='100px' height='40px' />
             </Box>
 
@@ -37,7 +38,7 @@ function HomePageLayout({ children }: { children: React.ReactNode }) {
               </>
             )}
 
-            {user && <p>Upload a video</p>}
+            {user && <UploadVideo />}
           </Box>
         </Header>
       }
